@@ -1,6 +1,7 @@
 import argparse
 import sys
 from bs4 import BeautifulSoup
+from .links import check_links
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     try:
@@ -10,7 +11,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 
 from .fetch import fetch_page
-from .checks import ALL_CHECKS
+from .checks import ALL_CHECKS, check_response_time
 
 ICONS = {"pass": "✅", "warn": "⚠️ ", "fail": "❌"}
 
@@ -32,6 +33,13 @@ def main():
     for check in ALL_CHECKS:
         result = check(soup)
         print(f"{ICONS[result.status]} {result.name}: {result.message}")
+
+    result = check_response_time(response)
+    print(f"{ICONS[result.status]} {result.name}: {result.message}")
+
+    result = check_links(soup, args.url)
+    print(f"{ICONS[result.status]} {result.name}: {result.message}")
+
 
 
 if __name__ == "__main__":
