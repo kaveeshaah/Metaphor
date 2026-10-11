@@ -1,5 +1,13 @@
 import argparse
+import sys
 from bs4 import BeautifulSoup
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 
 from .fetch import fetch_page
 from .checks import ALL_CHECKS

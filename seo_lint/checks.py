@@ -39,4 +39,37 @@ def check_meta_description(soup: BeautifulSoup) -> Result:
     return Result("Meta description", "pass", f"present ({length} chars)")
 
 
-ALL_CHECKS = [check_title, check_meta_description]
+def check_h1(soup: BeautifulSoup) -> Result:
+    h1s = soup.find_all("h1")
+    count = len(h1s)
+
+    if count == 0:
+        return Result("H1 tag", "fail", "missing")
+    if count > 1:
+        return Result("H1 tag", "warn", f"{count} found (aim for exactly 1)")
+    text = h1s[0].get_text(strip=True)
+    if not text:
+        return Result("H1 tag", "fail", "empty")
+    return Result("H1 tag", "pass", f"present ({len(text)} chars)")
+
+
+def check_image_alts(soup: BeautifulSoup) -> Result:
+    images = soup.find_all("img")
+    if not images:
+        return Result("Image alt text", "pass", "no images found")
+
+    missing = [img for img in images if not (img.get("alt") or "").strip()]
+    if missing:
+        return Result(
+            "Image alt text", "fail",
+            f"{len(missing)} of {len(images)} images missing alt text",
+        )
+    return Result("Image alt text", "pass", f"all {len(images)} images have alt text")
+
+
+ALL_CHECKS = [
+    check_title,
+    check_meta_description,
+    check_h1,
+    check_image_alts,
+]
