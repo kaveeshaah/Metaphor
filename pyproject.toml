@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seo-lint"
+version = "0.1.0"
+description = "A command-line tool that audits a page's on-page SEO."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+seo-lint = "seo_lint.cli:main"
+
+[tool.setuptools]
+packages = ["seo_lint"]
