@@ -1,1 +1,0 @@
-"""SEO Lint package."""
